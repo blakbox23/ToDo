@@ -1,0 +1,96 @@
+
+//declaring classes from the HTML
+const container = document.querySelector('.container');
+let inputValue = document.querySelector('.input');
+const add = document.querySelector('.add');
+
+//Using local storage 
+//setItem and getItem in localStorage
+//are they stored in JSON format?
+//
+if(window.localStorage.getItem("todos") == undefined){
+    let todos = [];
+    window.localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+let todosEX = window.localStorage.getItem("todos");
+let todos = JSON.parse(todosEX);
+
+//working with classes
+//
+class item{
+    constructor(name){
+        this.createItem(name);
+    }
+    createItem(name){
+        let itemBox = document.createElement('.div');
+        itemBox.classList.add('item');
+
+        let input = document.createElement('input');                             //document.createElemnt
+        input.type = "text";
+        input.disabled = true;
+        input.value = name;
+        input.classList.add('item_input');
+
+        let edit = document.createElement('.button');
+        edit.classList.add('edit');
+        edit.innerHTML = "EDIT";
+        edit.addEventListener('click', ()=>this.edit(input, name));                 // read this line of addEventListener
+
+        let remove = document.createElement('.button');
+        remove.classList.add('remove');                                              
+        remove.innerHTML = "REMOVE";
+        remove.addEventListener('click', ()=>this.remove(itemBox, name));              // what are these in the parameters 
+
+        container.appendChild(itemBox);
+
+        itemBox.appendChild(input);
+        itemBox.appendChild(edit);                                                       // what is the appendChild function
+        itemBox.appendChild(remove);
+
+    }
+
+    //HOW IS IT edited?
+    //
+
+    edit(input, name){
+        if(input.disabled == true){
+            input.disabled = !input.disabled;
+        } else{
+            input.disabled = !input.disabled;
+            let indexof = todos.indexof(name);
+            todos[indeof] = input.value;
+            window.localStorage.seItem("todos", JSON.stringify(todos));
+        }
+    }
+
+    //HOW IS IT removed
+    //
+    remove(itemBox, name){
+        itemBox.parentNode.removeChild(itemBox);                                                //parentNode.removeChild
+        let index = todos.indexof(name);
+        todos.spice(index, 1);
+        window.localStorage.setItem("todos", JSON.stringify(todos));
+    }
+}
+
+add.addEventListener('click', check);
+window.addEventListener('keydown', (e) => {
+	if(e.which == 13){
+		check();
+	}
+})
+function check(){
+	if(inputValue.value != ""){
+		new item(inputValue.value);
+        todos.push(inputValue.value);
+        window.localStorage.setItem("todos", JSON.stringify(todos));
+		inputValue.value = "";
+	}
+}
+for (let v = 0 ; v < todos.length ; v++){
+    new item(todos[v]);
+}
+
+
+new item("sport");
